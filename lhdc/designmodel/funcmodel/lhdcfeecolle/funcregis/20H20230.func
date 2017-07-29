@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="funcregister" class="nc.pubapp.pade.funcmodel.vo.FuncRegister"><property name="bmf_path" value="lhdc\METADATA\lhdc_feecolle.bmf"/>
+<property name="busiActiveList">
+<list></list>
+</property>
+<property name="cfunid" value="0001ZZ10000000008Q5K"/>
+<property name="class_name" value="nc.ui.pubapp.uif2app.ToftPanelAdaptorEx"/>
+<property name="dr" value="0"/>
+<property name="fun_name" value="费用汇总"/>
+<property name="fun_property" value="0"/>
+<property name="funcRegisterButtonList">
+<list></list>
+</property>
+<property name="funcRegisterParamList">
+<list><bean class="nc.pubapp.pade.funcmodel.vo.FuncRegisterParam"><property name="dr" value="0"/>
+<property name="paramname" value="BeanConfigFilePath"/>
+<property name="paramvalue" value="nc/ui/lhprj/lhdc/lhdcfeecolle/ace/view/Lhdcfeecolle_config.xml"/>
+<property name="parentid" value="0001ZZ10000000008Q5K"/>
+<property name="pk_param" value="0001ZZ10000000008Q5L"/>
+<property name="ts" value="2017-07-05 13:05:10"/>
+</bean>
+</list>
+</property>
+<property name="funcode" value="20H20230"/>
+<property name="funnode_path" value="lhdc\designmodel\ace\client\20H20230.fnf"/>
+<property name="funtype" value="0"/>
+<property name="isbuttonpower" value="false"/>
+<property name="isenable" value="true"/>
+<property name="isfunctype" value="false"/>
+<property name="menuModelFilePath" value="lhdc/designmodel/funcmodel/lhdcfeecolle/menuitemregis/20H20230.menu"/>
+<property name="metaDataID" value="cebef4b2-68d2-4ff7-96cf-0d4402e832c9"/>
+<property name="moduleName" value="lhprj"/>
+<property name="orgtypecode" value="FINANCEORGTYPE000000"/>
+<property name="own_module" value="20H2"/>
+<property name="pageList">
+<list></list>
+</property>
+<property name="parent_id" value="1001A11000000000U6F8"/>
+<property name="pk_group" value="~"/>
+<property name="ts" value="2017-07-05 13:05:10"/>
+<property name="uif2model_path" value="lhdc\designmodel\ace\uif2model\20H20230.umf"/>
+</bean>
+
+</beans>

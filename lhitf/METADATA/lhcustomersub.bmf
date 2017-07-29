@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><component conRouterType="曼哈顿直角" createIndustry="0" createTime="2017-05-31 17:52:52" creator="YONYOU NC" description="" displayName="立恒客户子户" fromSourceBmf="true" gencodestyle="自定义样式" help="" id="e79a2a6f-cbd1-49a4-bb6a-e7fd145c060d" industry="0" industryChanged="false" industryIncrease="false" industryName="" isSource="false" isbizmodel="false" mainEntity="1139db12-7b92-4a9b-98e8-15daa02b7fc0" metaType=".bmf" modifier="YONYOU NC" modifyIndustry="0" modifyTime="2017-06-02 13:06:57" name="lhcustomersub" namespace="lhprj" ownModule="lhprj" preLoad="false" programcode="0" resModuleName="lhcustomersub" resid="" version="5" versionType="0">
+    <celllist>
+        <entity accessorClassName="nc.md.model.access.javamap.NCBeanStyle" bizItfImpClassName="" componentID="e79a2a6f-cbd1-49a4-bb6a-e7fd145c060d" createIndustry="0" createTime="2017-05-31 17:53:57" creator="YONYOU NC" czlist="" description="" displayName="立恒客户子户" fullClassName="nc.vo.lhprj.lhcustomersub.LhCustomerSubVO" height="233" help="" id="1139db12-7b92-4a9b-98e8-15daa02b7fc0" industryChanged="false" isAuthen="true" isCreateSQL="true" isExtendBean="false" isPrimary="true" isSource="true" keyAttributeId="7cf6824a-de1e-45a0-b4f4-2bbc20ff15e3" modInfoClassName="" modifier="YONYOU NC" modifyIndustry="0" modifyTime="2017-06-02 13:08:39" name="LhCustomerSub" resid="" stereoType="" tableName="lhprj_lhcustomersub" userDefClassName="" versionType="0" visibility="public" width="94" x="336" y="110">
+            <attributelist>
+                <attribute accessStrategy="" accesspower="false" accesspowergroup="" calculation="false" classID="1139db12-7b92-4a9b-98e8-15daa02b7fc0" createIndustry="0" dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defaultValue="" description="" displayName="客户子户主键" dynamic="false" dynamicTable="" fieldName="pk_id" fieldType="char" fixedLength="false" forLocale="false" help="" id="7cf6824a-de1e-45a0-b4f4-2bbc20ff15e3" industryChanged="false" isActive="true" isAuthorization="true" isDefaultDimensionAttribute="false" isDefaultMeasureAttribute="false" isFeature="false" isGlobalization="false" isHide="false" isKey="true" isNullable="false" isReadOnly="false" isShare="false" isSource="true" length="50" maxValue="" minValue="" modifyIndustry="0" name="pk_id" notSerialize="false" precise="" refModelName="" resid="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public"/>
+                <attribute accessStrategy="" accesspower="false" accesspowergroup="" calculation="false" classID="1139db12-7b92-4a9b-98e8-15daa02b7fc0" createIndustry="0" dataType="BS000010000100001001" dataTypeStyle="SINGLE" dbtype="varchar" defaultValue="" description="" displayName="客户子户编码" dynamic="false" dynamicTable="" fieldName="custsubcode" fieldType="varchar" fixedLength="false" forLocale="false" help="" id="9ab898de-c6ea-42b8-afa9-97d432232c97" industryChanged="false" isActive="true" isAuthorization="true" isDefaultDimensionAttribute="false" isDefaultMeasureAttribute="false" isFeature="false" isGlobalization="false" isHide="false" isKey="false" isNullable="true" isReadOnly="false" isShare="false" isSource="true" length="50" maxValue="" minValue="" modifyIndustry="0" name="custsubcode" notSerialize="false" precise="" refModelName="" resid="" sequence="1" typeDisplayName="String" typeName="String" versionType="0" visibility="public"/>
+                <attribute accessStrategy="" accesspower="false" accesspowergroup="" calculation="false" classID="1139db12-7b92-4a9b-98e8-15daa02b7fc0" createIndustry="0" dataType="BS000010000100001001" dataTypeStyle="SINGLE" dbtype="varchar" defaultValue="" description="" displayName="客户子户名称" dynamic="false" dynamicTable="" fieldName="custsubname" fieldType="varchar" fixedLength="false" forLocale="false" help="" id="4285bc0e-e59e-4a5d-b8e3-acd0914dc096" industryChanged="false" isActive="true" isAuthorization="true" isDefaultDimensionAttribute="false" isDefaultMeasureAttribute="false" isFeature="false" isGlobalization="false" isHide="false" isKey="false" isNullable="true" isReadOnly="false" isShare="false" isSource="true" length="50" maxValue="" minValue="" modifyIndustry="0" name="custsubname" notSerialize="false" precise="" refModelName="" resid="" sequence="2" typeDisplayName="String" typeName="String" versionType="0" visibility="public"/>
+                <attribute accessStrategy="" accesspower="false" accesspowergroup="" calculation="false" classID="1139db12-7b92-4a9b-98e8-15daa02b7fc0" createIndustry="0" dataType="BS000010000100001001" dataTypeStyle="SINGLE" dbtype="varchar" defaultValue="" description="" displayName="所属客户编码" dynamic="false" dynamicTable="" fieldName="custcode" fieldType="varchar" fixedLength="false" forLocale="false" help="" id="977e0963-a390-4d1e-8d04-61300fabe7ba" industryChanged="false" isActive="true" isAuthorization="true" isDefaultDimensionAttribute="false" isDefaultMeasureAttribute="false" isFeature="false" isGlobalization="false" isHide="false" isKey="false" isNullable="true" isReadOnly="false" isShare="false" isSource="true" length="50" maxValue="" minValue="" modifyIndustry="0" name="custcode" notSerialize="false" precise="" refModelName="" resid="" sequence="3" typeDisplayName="String" typeName="String" versionType="0" visibility="public"/>
+            </attributelist>
+            <operationlist/>
+            <busiitfs/>
+            <busimaps/>
+            <canzhaolist/>
+            <accessor classFullname="nc.md.model.access.javamap.NCBeanStyle" displayName="NCVO" name="NCVO">
+                <properties/>
+            </accessor>
+        </entity>
+    </celllist>
+    <connectlist/>
+    <refdepends/>
+    <refdependLoseIDs/>
+    <cellRemoveLog/>
+    <rulers>
+        <ruler isHorizontal="true" unit="0">
+            <guideList/>
+        </ruler>
+        <ruler isHorizontal="false" unit="0">
+            <guideList/>
+        </ruler>
+    </rulers>
+</component>

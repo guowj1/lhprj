@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='gb2312'?>
+<module name="CMPEJB">
+	<public>
+		    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+	      <interface>nc.itf.cmp.apply.ILhQueryGlBalance</interface>
+	      <implementation>nc.impl.cmp.apply.ImplLhQueryGlBalance</implementation>
+	    </component>
+	    
+	</public>
+</module>

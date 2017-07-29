@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="applyinterceptor_mediator" class="nc.ui.uif2.uiextend.ActionInterceptorExtPreprocessor"
+		init-method="process">
+		<property name="interceptors">
+			<list>
+				<bean class="nc.ui.uif2.uiextend.ActionInterceptorExtInfo">
+					<property name="interceptor" ref="lhapplyUnCommitAction"></property><!-- 扩展的拦截器 -->
+					<property name="targetAction" ref="unCommitAction"></property><!-- 需要扩展拦截器的按钮 -->
+				</bean>
+				<bean class="nc.ui.uif2.uiextend.ActionInterceptorExtInfo">
+					<property name="interceptor" ref="lhapplySaveAction"></property><!-- 扩展的拦截器 -->
+					<property name="targetAction" ref="saveAction"></property><!-- 需要扩展拦截器的按钮 -->
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="lhapplyUnCommitAction" class="nc.ui.cmp.apply.ext.LhApplyUnCommitActionInterceptor">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="billFormEditor" />
+		<!-- <property name="editorModel" ref=icBizEditorModel></property> -->
+	</bean>
+	<bean id="lhapplySaveAction" class="nc.ui.cmp.apply.ext.LhApplySaveActionInterceptor">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="billFormEditor" />
+		<!-- <property name="editorModel" ref=icBizEditorModel></property> -->
+	</bean>
+
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfList" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="queryAuditFlowAction" />
+		<property name="pos" value="before" />
+		<property name="action" ref="rwStatusAction" />
+	</bean>
+	<bean id="rwStatusAction" class="nc.ui.cmp.apply.ext.LhApplyStatusReWriteAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	
+	
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfList" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="generateAction" />
+		<property name="pos" value="before" />
+		<property name="action" ref="FrozenLineAction" />
+	</bean>
+	<bean id="FrozenLineAction" class="nc.ui.cmp.apply.ext.LhApplyFrozenAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="listView" ref="listView" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+
+</beans>

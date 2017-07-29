@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="general" class="nc.pubapp.pade.code.funnode.FunNodePara">
+        <property name="moduleName" value="lhprj" />
+	    <property name="bpfPath" value="test.bpf" />
+	    <property name="funcode" value="20H20111"/>
+	    <property name="funNodeName" value="lhdc.lhqtstdton"/>
+	    <property name="clientPackName" value="nc.ui.lhprj.lhdc.lhqtstdton"/>
+			  		<property name="dbilldDate" value="Dbilldate" />
+			    <property name="metaData" value="lhdc\METADATA\lhdc_qtstdton.bmf" />
+	    <property name="xmlPath" value="lhdc\src\client\nc\ui\lhprj\lhdc/lhqtstdton\ace\view\Lhqtstdton_config.xml" />
+	    <property name="metaDataType" value="multiType" />
+	    <property name="funcregispath" value="lhdc/designmodel/funcmodel/lhqtstdton/funcregis/20H20111.func" />
+	    <property name="quetempath" value="lhdc/designmodel/templet/lhqtstdton/querytemplet/20H20111.qtf" />
+	    <property name="printtempath" value="lhdc/designmodel/templet/lhqtstdton/outtemplet/20H20111.otf" />
+	    <property name="systembasepath" value="lhdc/designmodel/systemplatebase/lhqtstdton/20H20111/20H20111.stb" />
+	    <property name="extendSuffix" value=""/>
+	    <property name="uif2ModelFilePath" value="lhdc\designmodel\ace\uif2model\20H20111.umf"/>
+	    <property name="busiCompName" value="lhdc"/>
+	    <property name="metaDataId" value="2f43bbfb-f09c-4df1-8838-1bc401e0ed6e"/>
+	</bean>
+	
+	<bean id="templet" class="nc.pubapp.pade.code.funnode.Templet">
+	    <property name="tempStyle" value="2" />
+	    <property name="nodeKey" value="" />
+		<property name="templetPath" value="lhdc/designmodel/templet/lhqtstdton/billtemplet/20H20111.btf" />
+	</bean>
+
+	<bean id="BAEHpara" class="nc.pubapp.pade.code.funnode.BodyAfterEditHandlerPara">
+		<property name="itemList">
+			<list>
+									<bean  class="nc.pubapp.pade.code.funnode.EditHandleItemPara">
+						<property name="className" value="MaterialHandler" />
+						<property name="fullClassName"
+							value="nc.ui.lhprj.lhdc.lhqtstdton.handler.MaterialHandler" />
+						<property name="key" value="pk_matclass" />
+						<property name="methodName" value="afterEdit" />
+					</bean>
+							</list>
+		</property>
+	</bean>
+
+	<bean id="BBEHpara" class="nc.pubapp.pade.code.funnode.BodyBeforeEditHandlerPara">
+		<property name="itemList">
+			<list>
+									<bean  class="nc.pubapp.pade.code.funnode.EditHandleItemPara">
+						<property name="className" value="MaterialHandler" />
+						<property name="fullClassName"
+							value="nc.ui.lhprj.lhdc.lhqtstdton.handler.MaterialHandler" />
+						<property name="key" value="pk_matclass" />
+						<property name="methodName" value="beforeEdit" />
+					</bean>
+							</list>
+		</property>
+	</bean>
+	
+	<bean id="HTBEHpara" class="nc.pubapp.pade.code.funnode.HeadTailBeforeEditHandlerPara">
+	</bean>
+	
+	<bean id="HTAEHpara" class="nc.pubapp.pade.code.funnode.HeadTailAfterEditHandlerPara">
+	</bean>
+	
+	<bean id="SerPropara" class="nc.pubapp.pade.code.funnode.ServiceProxyPara">
+					<property name="queryByQueryScheme">
+			<bean class="nc.pubapp.pade.code.funnode.ServiceProxyItemPara">
+				<property name="fullClassName" value="nc.itf.lhprj.ILhqtstdtonMaintain" />
+				<property name="itmClassName" value=".ILhqtstdtonMaintain" />
+				<property name="methodName" value="query" />
+			</bean>
+		</property>
+				</bean>
+	
+	<bean id="FilePackNameBean" class="nc.pubapp.pade.code.engine.FilePackNamePara">
+    	<property name="filePackNameList">
+	    	<list>
+				     						       <value>nc.ui.lhprj.lhdc.lhqtstdton.handler.OrgChangedHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.handler.AceAddHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.handler.AceBodyAfterEditHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.handler.AceBodyBeforeEditHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.handler.AceHeadTailAfterEditHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.handler.AceHeadTailBeforeEditHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.handler.AceOrgChangedHandler.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.ace.serviceproxy.AceLhqtstdtonMaintainProxy.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.action.LhqtstdtonAddAction.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.action.LhqtstdtonDeleteAction.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.action.LhqtstdtonEditAction.java</value>
+			       <value>nc.ui.lhprj.lhdc.lhqtstdton.action.CopyActionProcessor.java</value>
+			     			       <value>nc.ui.lhprj.lhdc.lhqtstdton.handler.MaterialHandler.java</value>
+			     			       <value>nc.ui.lhprj.lhdc.lhqtstdton.query.LhqtstdtonQueryConditionInitializer.java</value>
+		     </list>
+	   </property>
+	</bean>
+
+</beans>

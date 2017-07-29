@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="ncto/classes" path="ncto/src/public"/>
+	<classpathentry kind="src" output="ncto/classes" path="ncto/src/client"/>
+	<classpathentry kind="src" output="ncto/classes" path="ncto/src/private"/>
+	<classpathentry kind="src" output="ncto/classes" path="ncto/src/test"/>
+	<classpathentry kind="src" output="ncto/classes" path="ncto/resources"/>
+	<classpathentry kind="src" output="lhdc/classes" path="lhdc/src/public"/>
+	<classpathentry kind="src" output="lhdc/classes" path="lhdc/src/client"/>
+	<classpathentry kind="src" output="lhdc/classes" path="lhdc/src/private"/>
+	<classpathentry kind="src" output="lhdc/classes" path="lhdc/src/test"/>
+	<classpathentry kind="src" output="lhdc/classes" path="lhdc/resources"/>
+	<classpathentry kind="src" output="lhitf/classes" path="lhitf/src/public"/>
+	<classpathentry kind="src" output="lhitf/classes" path="lhitf/src/client"/>
+	<classpathentry kind="src" output="lhitf/classes" path="lhitf/src/private"/>
+	<classpathentry kind="src" output="lhitf/classes" path="lhitf/src/test"/>
+	<classpathentry kind="src" output="lhitf/classes" path="lhitf/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/lib/xfire-all-1.2.6.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/ufesbexpress/META-INF/lib/ufesbexpress_xi_uapeaiLevel-1.jar" sourcepath="E:/ufsoft/NC65/modules/ufesbexpress/META-INF/lib/ufesbexpress_xi_uapeaiLevel-1_src.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/gl/META-INF/lib/gl_voucher.jar" sourcepath="E:/ufsoft/NC65/modules/gl/META-INF/lib/gl_voucher_src.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/cmp/META-INF/lib/cmp_apply.jar" sourcepath="E:/ufsoft/NC65/modules/cmp/META-INF/lib/cmp_apply_src.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/cdm/META-INF/lib/cdm_pub.jar" sourcepath="E:/ufsoft/NC65/modules/cdm/META-INF/lib/cdm_pub_src.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/to/META-INF/lib/to_intrasettle.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/ia/META-INF/lib/ia_costcalculate.jar" sourcepath="E:/ufsoft/NC65/modules/ia/META-INF/lib/ia_costcalculate_src.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/to/META-INF/lib/to_pub.jar" sourcepath="E:/ufsoft/NC65/modules/to/META-INF/lib/to_pub_src.jar"/>
+	<classpathentry kind="lib" path="E:/ufsoft/NC65/modules/to/META-INF/lib/to_transferringorder.jar"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Ant_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Product_Common_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Middleware_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Framework_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Module_Public_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Module_Client_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Module_Private_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Module_Lang_Library"/>
+	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Generated_EJB"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
