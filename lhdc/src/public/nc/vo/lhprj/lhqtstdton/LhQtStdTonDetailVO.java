@@ -76,6 +76,12 @@ public String vbdef9;
 *表体自定义项10
 */
 public String vbdef10;
+
+public String vbdef11;
+public String vbdef12;
+public String vbdef13;
+public String vbdef14;
+public String vbdef15;
 /**
 *上层单据主键
 */
@@ -337,7 +343,47 @@ return this.vbdef10;
 public void setVbdef10 ( String vbdef10) {
 this.vbdef10=vbdef10;
 } 
- 
+
+public String getVbdef11() {
+	return vbdef11;
+}
+
+public void setVbdef11(String vbdef11) {
+	this.vbdef11 = vbdef11;
+}
+
+public String getVbdef12() {
+	return vbdef12;
+}
+
+public void setVbdef12(String vbdef12) {
+	this.vbdef12 = vbdef12;
+}
+
+public String getVbdef13() {
+	return vbdef13;
+}
+
+public void setVbdef13(String vbdef13) {
+	this.vbdef13 = vbdef13;
+}
+
+public String getVbdef14() {
+	return vbdef14;
+}
+
+public void setVbdef14(String vbdef14) {
+	this.vbdef14 = vbdef14;
+}
+
+public String getVbdef15() {
+	return vbdef15;
+}
+
+public void setVbdef15(String vbdef15) {
+	this.vbdef15 = vbdef15;
+}
+
 /**
 * 属性 生成上层主键的Getter方法.属性名：上层主键
 *  创建日期:2017-6-16

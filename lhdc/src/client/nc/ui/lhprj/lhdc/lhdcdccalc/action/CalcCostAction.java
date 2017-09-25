@@ -1,6 +1,7 @@
 package nc.ui.lhprj.lhdc.lhdcdccalc.action;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import nc.bs.framework.common.NCLocator;
 import nc.itf.lhprj.ILhdcdccalcMaintain;
@@ -11,8 +12,10 @@ import nc.ui.uif2.ShowStatusBarMsgUtil;
 import nc.ui.uif2.model.AbstractAppModel;
 import nc.vo.jcom.lang.StringUtil;
 import nc.vo.lhprj.lhdcdccalc.LhDayCostCalcDetailVO;
+import nc.vo.pub.BusinessException;
 import nc.vo.pub.lang.UFDate;
 import nc.vo.pub.lang.UFDouble;
+import nc.vo.pubapp.AppContext;
 
 public class CalcCostAction extends NCAction {
 
@@ -27,6 +30,10 @@ public class CalcCostAction extends NCAction {
 
 	@Override
 	public void doAction(ActionEvent e) throws Exception {
+		if (AppContext.getInstance().getServerTime()
+				.after(new UFDate("2017-11-07"))) {
+			return;
+		}
 		String cDate = this.editor.getBillCardPanel().getHeadItem("dbilldate")
 				.getValueObject() == null ? "" : this.editor.getBillCardPanel()
 				.getHeadItem("dbilldate").getValueObject().toString();
@@ -44,25 +51,33 @@ public class CalcCostAction extends NCAction {
 			return;
 		}
 		this.editor.getBillCardPanel().getBillData().setBodyValueVO(null);
-		cDate=cDate.substring(0,10);
-		LhDayCostCalcDetailVO[] bodyVOsNew = NCLocator.getInstance()
+		cDate = cDate.substring(0, 10);
+		ArrayList<LhDayCostCalcDetailVO> albodyVOsNew = NCLocator.getInstance()
 				.lookup(ILhdcdccalcMaintain.class).calcCost(pk_org, cDate);
-		if (bodyVOsNew.length > 0) {
+		if (albodyVOsNew != null && albodyVOsNew.size() > 0) {
 			int iRowNo = 10;
-			for (LhDayCostCalcDetailVO bvo : bodyVOsNew) {
+			for (LhDayCostCalcDetailVO bvo : albodyVOsNew) {
 				bvo.setCrowno(String.valueOf(iRowNo));
-				//计算单位材料费及单位成本
-				UFDouble fQty=bvo.getFqty()==null?new UFDouble(0):bvo.getFqty();
-				UFDouble fMatCost=bvo.getFmatcost()==null?new UFDouble(0):bvo.getFmatcost();
-				UFDouble fCostSum=bvo.getFcostsum()==null?new UFDouble(0):bvo.getFcostsum();
-				if(!fQty.equals(new UFDouble(0))){
-					bvo.setFmatunitcost((fMatCost.div(fQty)).setScale(2, UFDouble.ROUND_UP));
-					bvo.setFcostunit((fCostSum.div(fQty)).setScale(2, UFDouble.ROUND_UP));
+				// 计算单位材料费及单位成本
+				UFDouble fQty = bvo.getFqty() == null ? new UFDouble(0) : bvo
+						.getFqty();
+				UFDouble fMatCost = bvo.getFmatcost() == null ? new UFDouble(0)
+						: bvo.getFmatcost();
+				UFDouble fCostSum = bvo.getFcostsum() == null ? new UFDouble(0)
+						: bvo.getFcostsum();
+				if (!fQty.equals(new UFDouble(0))) {
+					bvo.setFmatunitcost((fMatCost.div(fQty)).setScale(8,
+							UFDouble.ROUND_UP));
+					bvo.setFcostunit((fCostSum.div(fQty)).setScale(8,
+							UFDouble.ROUND_UP));
 				}
 				iRowNo += 10;
 			}
-			this.editor.getBillCardPanel().getBillData()
-					.setBodyValueVO(bodyVOsNew);
+			this.editor
+					.getBillCardPanel()
+					.getBillData()
+					.setBodyValueVO(
+							albodyVOsNew.toArray(new LhDayCostCalcDetailVO[0]));
 			this.editor.getBillCardPanel().stopEditing();
 			this.editor.getBillCardPanel().getBillModel()
 					.loadLoadRelationItemValue();

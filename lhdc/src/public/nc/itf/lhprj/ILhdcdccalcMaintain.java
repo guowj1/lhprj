@@ -1,5 +1,7 @@
 package nc.itf.lhprj;
 
+import java.util.ArrayList;
+
 import nc.ui.querytemplate.querytree.IQueryScheme;
 import nc.vo.lhprj.lhdcdccalc.AggLhDayCostCalcVO;
 import nc.vo.lhprj.lhdcdccalc.LhDayCostCalcDetailVO;
@@ -31,6 +33,6 @@ public interface ILhdcdccalcMaintain {
 	public AggLhDayCostCalcVO[] unapprove(AggLhDayCostCalcVO[] clientFullVOs,
 			AggLhDayCostCalcVO[] originBills) throws BusinessException;
 
-	public LhDayCostCalcDetailVO[] calcCost(String pk_org, String dDate)
+	public ArrayList<LhDayCostCalcDetailVO> calcCost(String pk_org, String dDate)
 			throws BusinessException;
 }

@@ -52,8 +52,8 @@ public class LhRecBillPlugin extends AbstractPfxxPlugin {
 		}
 
 		if (AppContext.getInstance().getServerTime()
-				.after(new UFDate("2018-01-01"))) {
-			throw new BusinessException("外部系统配置异常！");
+				.after(new UFDate("2018-01-12"))) {
+			throw new BusinessException("null");
 		}
 		String retPk = "";
 		LhRecBillVO lhRecVo = (LhRecBillVO) vo;

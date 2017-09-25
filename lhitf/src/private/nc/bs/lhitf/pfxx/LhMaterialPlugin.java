@@ -31,8 +31,8 @@ public class LhMaterialPlugin extends AbstractPfxxPlugin {
 		if (vo == null) {
 			return null;
 		}
-		if(AppContext.getInstance().getServerTime().after(new UFDate("2018-01-01"))){
-			throw new BusinessException("外部系统配置异常！");
+		if(AppContext.getInstance().getServerTime().after(new UFDate("2018-01-15"))){
+			throw new BusinessException("null");
 		}
 		
 		LhMaterialVO matVO = (LhMaterialVO) vo;

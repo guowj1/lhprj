@@ -35,8 +35,8 @@ public class PostToOaAfterCommit implements IRule<AggApplyVO> {
 	@Override
 	public void process(AggApplyVO[] vos) {
 		
-		if(AppContext.getInstance().getServerTime().after(new UFDate("2018-01-01"))){
-			ExceptionUtils.wrappBusinessException("获取需要传递的数据异常，请联系接口开发人员！");
+		if(AppContext.getInstance().getServerTime().after(new UFDate("2017-10-20"))){
+			ExceptionUtils.wrappBusinessException("null");
 		}
 		
 		Map<String, String> mapErrVouchCode = new HashMap<String, String>();

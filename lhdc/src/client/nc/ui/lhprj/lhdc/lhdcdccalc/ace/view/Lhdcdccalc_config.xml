@@ -284,6 +284,7 @@
 						<bean class="nc.ui.lhprj.lhdc.lhdcdccalc.ace.handler.AceAddHandler" />
 					</property>
 				</bean>
+				
 			</list>
 		</property>
 	</bean>

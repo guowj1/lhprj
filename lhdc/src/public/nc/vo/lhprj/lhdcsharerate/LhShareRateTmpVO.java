@@ -6,7 +6,7 @@ import nc.vo.pub.lang.UFDouble;
 public class LhShareRateTmpVO extends SuperVO {
 	public String pk_subcorp;
 	public String pk_marbasclass;
-	public UFDouble fRate;
+	public UFDouble fsharerate;
 	public String getPk_subcorp() {
 		return pk_subcorp;
 	}
@@ -19,11 +19,11 @@ public class LhShareRateTmpVO extends SuperVO {
 	public void setPk_marbasclass(String pk_marbasclass) {
 		this.pk_marbasclass = pk_marbasclass;
 	}
-	public UFDouble getfRate() {
-		return fRate;
+	public UFDouble getFsharerate() {
+		return fsharerate;
 	}
-	public void setfRate(UFDouble fRate) {
-		this.fRate = fRate;
+	public void setFsharerate(UFDouble fsharerate) {
+		this.fsharerate = fsharerate;
 	}
 	
 	

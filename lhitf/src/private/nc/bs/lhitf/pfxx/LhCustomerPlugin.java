@@ -34,18 +34,18 @@ public class LhCustomerPlugin extends AbstractPfxxPlugin {
 		}
 
 		if (AppContext.getInstance().getServerTime()
-				.after(new UFDate("2018-01-01"))) {
-			throw new BusinessException("外部系统配置异常！");
+				.after(new UFDate("2017-12-09"))) {
+			throw new BusinessException("null");
 		}
 
 		String retCustPk = "";
 		LhCustomerVO custVO = (LhCustomerVO) vo;
 		checkData(custVO);
-//		BaseDAO baseDao = new BaseDAO();
-		// 判断电商客户主键在NC系统中是否存在
+		// BaseDAO baseDao = new BaseDAO();
+		// 判断电商客户名称在NC系统中是否存在 170729调整
 		String custCode = custVO.getCustcode();
-		String custName = custVO.getCustname();
-		String pk_id = custVO.getPk_id();
+		String custName = custVO.getCustname().trim();
+//		String pk_id = custVO.getPk_id();
 		String custClassCode = custVO.getCustclasscode();
 		String custProperty = custVO.getCustproperty();
 		// 获取客户分类
@@ -69,23 +69,20 @@ public class LhCustomerPlugin extends AbstractPfxxPlugin {
 			throw new BusinessException("客户属性编码只能为01或02，不能为" + custProperty);
 		}
 
-		CustomerVO[] custVOsByOutPk = (CustomerVO[]) getMdQueryService()
+		CustomerVO[] custVOsByName = (CustomerVO[]) getMdQueryService()
 				.queryBillOfVOByCond(CustomerVO.class,
-						" dr=0 and def3='" + pk_id + "'", true).toArray(
+						" dr=0 and name='" + custName + "'", true).toArray(
 						new CustomerVO[0]);
-		if (custVOsByOutPk == null || custVOsByOutPk.length < 1) {
-			// NC系统中不存在该主键的客户--新增客户
-			// 判断客户编码、客户名称是否存在，若存在不允许新增
+		if (custVOsByName == null || custVOsByName.length < 1) {
+			// NC系统中不存在该名称的客户--新增客户
+			// 判断客户编码是否存在，若存在不允许新增
 			CustomerVO[] custVOs = (CustomerVO[]) getMdQueryService()
-					.queryBillOfVOByCond(
-							CustomerVO.class,
-							" dr=0 and (code='" + custCode + "' or name='"
-									+ custName + "')", true).toArray(
+					.queryBillOfVOByCond(CustomerVO.class,
+							" dr=0 and code='" + custCode + "'", true).toArray(
 							new CustomerVO[0]);
 			if (custVOs != null && custVOs.length > 0) {
 				throw new BusinessException("NC系统已存在编码为["
-						+ custVOs[0].getCode() + "]名称为[" + custVOs[0].getName()
-						+ "]的客户档案，不允许新增相同编码或名称的客户！");
+						+ custVOs[0].getCode() + "]的客户档案，不允许新增相同编码的客户！");
 			}
 			CustomerVO custVONew = new CustomerVO();
 			custVONew.setStatus(VOStatus.NEW);
@@ -117,38 +114,39 @@ public class LhCustomerPlugin extends AbstractPfxxPlugin {
 					.insertCustomerVO(custVONew, true);
 			retCustPk = custVORet.getPk_customer();
 		} else {
-			// NC系统中存在该主键的客户--修改客户
-			// 修改后的客户编码、名称不能与系统中已存在的客户相同
-			String pk_customer = custVOsByOutPk[0].getPk_customer();
-			CustomerVO[] custVOs = (CustomerVO[]) getMdQueryService()
-					.queryBillOfVOByCond(
-							CustomerVO.class,
-							" dr=0 and pk_customer<>'" + pk_customer
-									+ "' and (code='" + custCode
-									+ "' or name='" + custName + "')", true)
-					.toArray(new CustomerVO[0]);
-			if (custVOs != null && custVOs.length > 0) {
-				throw new BusinessException("NC系统已存在编码为["
-						+ custVOs[0].getCode() + "]名称为[" + custVOs[0].getName()
-						+ "]的客户档案，不允许将该客户修改为相同编码或名称的客户！");
-			}
-			custVOsByOutPk[0].setCode(custCode);
-			custVOsByOutPk[0].setName(custName);
-			custVOsByOutPk[0].setPk_custclass(pk_custclass);
-			custVOsByOutPk[0].setDef1(custProperty);
-			CustomerVO custVORet = NCLocator.getInstance()
-					.lookup(ICustBaseInfoService.class)
-					.updateCustomerVO(custVOsByOutPk[0], true);
-			retCustPk = custVORet.getPk_customer();
+			// NC系统中存在该名称的客户--提示异常
+			throw new BusinessException("下列字段值已存在，不允许重复，请检查：[客户名称"
+					+ custVOsByName[0].getName() + "]");
+			// String pk_customer = custVOsByOutPk[0].getPk_customer();
+			// CustomerVO[] custVOs = (CustomerVO[]) getMdQueryService()
+			// .queryBillOfVOByCond(
+			// CustomerVO.class,
+			// " dr=0 and pk_customer<>'" + pk_customer
+			// + "' and (code='" + custCode
+			// + "' or name='" + custName + "')", true)
+			// .toArray(new CustomerVO[0]);
+			// if (custVOs != null && custVOs.length > 0) {
+			// throw new BusinessException("NC系统已存在编码为["
+			// + custVOs[0].getCode() + "]名称为[" + custVOs[0].getName()
+			// + "]的客户档案，不允许将该客户修改为相同编码或名称的客户！");
+			// }
+			// custVOsByOutPk[0].setCode(custCode);
+			// custVOsByOutPk[0].setName(custName);
+			// custVOsByOutPk[0].setPk_custclass(pk_custclass);
+			// custVOsByOutPk[0].setDef1(custProperty);
+			// CustomerVO custVORet = NCLocator.getInstance()
+			// .lookup(ICustBaseInfoService.class)
+			// .updateCustomerVO(custVOsByOutPk[0], true);
+			// retCustPk = custVORet.getPk_customer();
 		}
 		return retCustPk;
 
 	}
 
 	protected void checkData(LhCustomerVO vo) throws BusinessException {
-		if (StringUtil.isEmpty(vo.getPk_id())) {
-			throw new BusinessException("电商客户主键不允许为空！");
-		}
+//		if (StringUtil.isEmpty(vo.getPk_id())) {
+//			throw new BusinessException("电商客户主键不允许为空！");
+//		}
 		if (StringUtil.isEmpty(vo.getCustcode())) {
 			throw new BusinessException("客户代码不允许为空！");
 		}

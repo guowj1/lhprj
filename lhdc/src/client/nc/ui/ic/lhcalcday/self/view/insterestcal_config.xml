@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext" />
+
+	<!--
+		模型部分配置###########################################################
+	-->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+	</bean>
+	
+	<bean id="boadatorfactory" class="nc.vo.bd.meta.BDObjectAdpaterFactory" />
+	
+	<!-- 应用服务类，负责进行模型操作的处理 -->
+	<bean id="manageModelService" class="nc.ui.ic.lhcalcday.self.model.InsterestCalModelService"/>
+	<!-- 管理应用模型-->
+	<bean id="icBizModel" class="nc.ui.pubapp.uif2app.model.BillManageModel">
+		<property name="service" ref="manageModelService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" />
+		<property name="billType" value="batchsign" />
+	</bean >
+
+	
+	<bean id="model" class="nc.ui.ic.lhcalcday.self.model.BatchInsterestCalModel">
+		<property name="service" ref="manageModelService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" />
+		<property name="billType" value="batchsign" />
+	</bean>
+	
+	<bean id="batchModel" class="nc.ui.pubapp.uif2app.model.BatchBillTableModel">
+		<property name="context"><ref bean="context"/></property>
+		<property name="businessObjectAdapterFactory"><ref bean="BOAdapterFactory"/></property>
+	</bean>
+	
+		<bean id="BOAdapterFactory" class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+		<property name="mode" value="MD"/>
+	</bean>
+
+		<!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+	<bean id="modelDataManager" class="nc.ui.pubapp.uif2app.query2.model.ModelDataManager">
+		<property name="model" ref="model" />
+		<property name="service" ref="manageModelService" />
+	</bean>
+
+	<!-- 列表控件的取值策略 -->
+	<bean id="componentValueManager"
+		class="nc.ui.uif2.editor.value.BillCardPanelMetaDataValueAdapter" />
+
+	<!-- 列表控件 -->
+	<bean id="list" class="nc.ui.pubapp.uif2app.view.ShowUpableBillListView"
+		init-method="initUI">
+		<property name="model" ref="model" />
+		<property name="multiSelectionEnable" value="true" />
+		<property name="multiSelectionMode" value="1" />
+		<property name="billListPanelValueSetter">
+		<bean class="nc.ui.ic.lhcalcday.self.view.InsterestCalListValueSetter" />
+		</property>
+	</bean> 
+
+	
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	<!--
+		界面布局总装###########################################################
+	-->
+	<bean id="container" class="nc.ui.uif2.TangramContainer" init-method="initUI">
+		<property name="constraints">
+			<list>
+				<bean id="down" class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="list"></property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="signQueryAction" />
+				<ref bean="separatorAction" />
+				<ref bean="settledaycalaction" />
+				<ref bean="separatorAction" />
+				<ref bean="unsettledaycalaction" />
+			</list>
+		</property>
+		<property name="model" ref="model"/>
+	</bean>
+
+	
+	<bean id="queryCondDlgInit"
+		class="nc.ui.ic.lhcalcday.self.init.InsterestCalQueryConditionDLGInitializer" />
+	
+	<bean id="signQueryAction" class="nc.ui.ic.lhcalcday.self.action.GetDataQueryAction">
+		<property name="model" ref="model" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="editor" ref="list" />
+		<property name="hasQueryArea" value="false"/>
+		<property name="qryCondDLGInitializer" ref="queryCondDlgInit" />
+	</bean>
+	
+	
+    <bean id="settledaycalaction" class="nc.ui.ic.lhcalcday.self.action.SettleDayCalAction">
+		<property name="model" ref="model" />
+		<property name="editor" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	
+	 <bean id="unsettledaycalaction" class="nc.ui.ic.lhcalcday.self.action.UnSettleDayCalAction">
+		<property name="model" ref="model" />
+		<property name="editor" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	
+	
+</beans>

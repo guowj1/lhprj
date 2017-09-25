@@ -23,8 +23,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class LhQueryCusBalance {
-	private final String POST_URL = "http://192.168.2.9/ecp/ncInterfaceController/receiveRequest";
-//	private final String POST_URL="http://192.168.10.209:8080/ecp/ncInterfaceController/receiveRequest";
+	private final String POST_URL = "http://192.168.2.9/ecp/ncInterfaceController/receiveRequest";//正式环境地址
+//	private final String POST_URL="http://192.168.10.145:80/ecp/ncInterfaceController/receiveRequest";//测试环境地址
 
 	public Map<String, UFDouble> getBalance(LhCustomerVO[] custVos)
 			throws BusinessException {

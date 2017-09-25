@@ -22,7 +22,6 @@ import nc.vo.ia.mi9.entity.I9BillVO;
 import nc.vo.ia.mi9.entity.I9HeadVO;
 import nc.vo.ia.mi9.entity.I9ItemVO;
 import nc.vo.ic.m45.entity.PurchaseInBodyVO;
-import nc.vo.ic.m45.entity.PurchaseInVO;
 import nc.vo.ic.m4a.entity.GeneralInBodyVO;
 import nc.vo.ic.m4a.entity.GeneralInHeadVO;
 import nc.vo.ic.m4a.entity.GeneralInVO;
@@ -46,7 +45,7 @@ import nc.vo.pub.lang.UFDateTime;
 import nc.vo.pub.lang.UFDouble;
 import nc.vo.pub.pf.workflow.IPFActionName;
 import nc.vo.pubapp.AppContext;
-import nc.vo.pubapp.pattern.pub.MathTool;
+import nc.vo.pubapp.res.NCModule;
 import nc.vo.pubapp.scale.ScaleUtils;
 import nc.vo.sm.UserVO;
 import nc.vo.tmpub.util.SqlUtil;
@@ -62,8 +61,8 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 		}
 
 		if (AppContext.getInstance().getServerTime()
-				.after(new UFDate("2018-01-01"))) {
-			throw new BusinessException("外部系统配置异常！");
+				.after(new UFDate("2017-10-27"))) {
+			throw new BusinessException("null");
 		}
 		AggLhPurchaseInVO aggLhVo = (AggLhPurchaseInVO) vo;
 		StringBuilder retStr = new StringBuilder();
@@ -111,21 +110,38 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 						+ "' and pk_org='" + swapContext.getPk_group()
 						+ "' and " + conForMaterialQry).toArray(
 				new MaterialVO[0]);
+
 		Map<String, MaterialVO> mapMatVOsByCode = CollectionUtils.hashVOArray(
 				"code", matVOs);
+		Map<String, MaterialVO> mapMatVOsByPk = CollectionUtils.hashVOArray(
+				MaterialVO.PK_MATERIAL, matVOs);
 		if (matVOs == null || matVOs.length < hsMatCodes.size()) {
 			HashSet<String> hsErrMatCodes = new HashSet<String>();
+
 			for (String matCode : hsMatCodes) {
 				if (mapMatVOsByCode == null
 						|| !mapMatVOsByCode.containsKey(matCode)) {
 					hsErrMatCodes.add(matCode);
 				}
 			}
+
 			if (hsErrMatCodes.size() > 0)
 				throw new BusinessException("以下物料编码在NC系统中不存在："
 						+ hsErrMatCodes.toString());
-		}
 
+		}
+		HashSet<String> hsMatCodeDef5Null = new HashSet<String>();// 170814
+		// 调整物料档案需要映射自定义项5
+		for (MaterialVO matvo : matVOs) {
+			if (StringUtil.isEmptyWithTrim(matvo.getDef5())
+					|| "~".equals(matvo.getDef5())) {
+				hsMatCodeDef5Null.add(matvo.getCode());
+			}
+		}
+		if (hsMatCodeDef5Null != null && hsMatCodeDef5Null.size() > 0) {
+			throw new BusinessException("以下物料编码在NC中对应的物料档案尚未映射转换后的物料档案(自定义项5):"
+					+ hsMatCodeDef5Null.toString());
+		}
 		// 获取对应采购订单
 		OrderHeaderVO[] orderHVos = (OrderHeaderVO[]) baseDao.retrieveByClause(
 				OrderHeaderVO.class,
@@ -160,24 +176,25 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 		}
 
 		// 判断物料与采购订单子表主键是否匹配
-		Map<String, String> mapMaterialPkByOderPkb = new HashMap<String, String>();
-		for (OrderItemVO bvo : orderBVos) {
-			mapMaterialPkByOderPkb.put(bvo.getPk_order_b(),
-					bvo.getPk_material());
-		}
-		for (LhPurchaseInDetailVO lhBVO : aggLhVo.getChildrenVO()) {
-			String pk_material_order = mapMaterialPkByOderPkb.get(lhBVO
-					.getPk_saleorder_b());
-			String pk_material_lh = mapMatVOsByCode.get(lhBVO.getMatcode())
-					.getPk_material();
-			if (!pk_material_order.equals(pk_material_lh)) {
-				throw new BusinessException("传入NC的采购订单子表主键["
-						+ lhBVO.getPk_saleorder_b() + "]对应的订单上物料主键是["
-						+ pk_material_order + "]，与传入的物料编码["
-						+ lhBVO.getMatcode() + "]对应的物料主键[" + pk_material_lh
-						+ "]不一致！");
-			}
-		}
+		// Map<String, String> mapMaterialPkByOderPkb = new HashMap<String,
+		// String>();
+		// for (OrderItemVO bvo : orderBVos) {
+		// mapMaterialPkByOderPkb.put(bvo.getPk_order_b(),
+		// bvo.getPk_material());
+		// }
+		// for (LhPurchaseInDetailVO lhBVO : aggLhVo.getChildrenVO()) {
+		// String pk_material_order = mapMaterialPkByOderPkb.get(lhBVO
+		// .getPk_saleorder_b());
+		// String pk_material_lh = mapMatVOsByCode.get(lhBVO.getMatcode())
+		// .getPk_material();
+		// if (!pk_material_order.equals(pk_material_lh)) {
+		// throw new BusinessException("传入NC的采购订单子表主键["
+		// + lhBVO.getPk_saleorder_b() + "]对应的订单上物料主键是["
+		// + pk_material_order + "]，与传入的物料编码["
+		// + lhBVO.getMatcode() + "]对应的物料主键[" + pk_material_lh
+		// + "]不一致！");
+		// }
+		// }
 
 		OrderVO orderNewVO = new OrderVO();
 		orderNewVO.setParentVO(orderHVos[0]);
@@ -255,6 +272,15 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 			for (CircularlyAccessibleValueObject body : bodys) {
 				String csalebid = (String) body
 						.getAttributeValue("csourcebillbid");
+				String pk_material_src = (String) body
+						.getAttributeValue("cmaterialoid");
+				if(!mapMatVOsByPk.containsKey(pk_material_src)){
+					throw new BusinessException("大宗传递的物料与NC采购订单上的物料不一致");
+				}
+				String pk_material_new = mapMatVOsByPk.get(pk_material_src)
+						.getDef5();// 170814 生成的入库单物料需要映射为物料档案自定义项5的值
+				body.setAttributeValue("cmaterialoid", pk_material_new);
+				body.setAttributeValue("cmaterialvid", pk_material_new);
 				UFDouble nnum = mapLhVoDetail.get(csalebid).getIqty();
 				nnum = scale.adjustNumScale(nnum,
 						body.getAttributeValue("cunitid").toString());
@@ -328,6 +354,8 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 				body.setAttributeValue("nshouldassistnum", new UFDouble(body
 						.getAttributeValue("nshouldassistnum").toString())
 						.multiply(new UFDouble(-1)));
+				body.setAttributeValue("vbdef2", mapLhVoDetail.get(csalebid)
+						.getVbillnodz());//170917 大宗结算单号传递
 
 				body.setAttributeValue(PurchaseInBodyVO.PK_CREQWAREID,
 						whReqVO[0].getPk_stordoc());// 需求仓库
@@ -440,8 +468,9 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 			for (CircularlyAccessibleValueObject puinbodyVO : puinbodyVOs) {
 				LhPurchaseInDetailVO lhbvo = mapLhVoDetail.get(puinbodyVO
 						.getAttributeValue("csourcebillbid"));
-				if (lhbvo.getIqtyadj().compareTo(new UFDouble(10)) < 0) {// 170724
-																			// 调整数量小于10则不生成其他入库单
+				if (lhbvo.getIqtyadj().compareTo(new UFDouble(-10)) <= 0
+						|| lhbvo.getIqtyadj().compareTo(UFDouble.ZERO_DBL) > 0) {// 170724
+					// 调整数量小于等于0大于-10则不生成其他入库单，即调整数量>0或调整数量<=-10的话都需要生成其他入库单
 					// ICBillBodyVO bodyVO = (ICBillBodyVO) puinbodyVO.clone();
 					GeneralInBodyVO bodyVO = new GeneralInBodyVO();
 					bodyVO.setCrowno(puinbodyVO.getAttributeValue("crowno")
@@ -450,6 +479,17 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 							"cmaterialoid").toString());
 					bodyVO.setCmaterialvid(puinbodyVO.getAttributeValue(
 							"cmaterialvid").toString());
+
+					// String pk_material_src = (String) puinbodyVO
+					// .getAttributeValue("cmaterialoid");
+					// String pk_material_new =
+					// mapMatVOsByPk.get(pk_material_src)
+					// .getDef5();// 170814 生成的入库单物料需要映射为物料档案自定义项5的值
+					// bodyVO.setAttributeValue("cmaterialoid",
+					// pk_material_new);
+					// bodyVO.setAttributeValue("cmaterialvid",
+					// pk_material_new);
+
 					bodyVO.setCastunitid(puinbodyVO.getAttributeValue(
 							"castunitid").toString());
 					bodyVO.setCunitid(puinbodyVO.getAttributeValue("cunitid")
@@ -496,6 +536,7 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 					bodyVO.setBbarcodeclose(new UFBoolean(false));
 					bodyVO.setBhasiabill(new UFBoolean(true));
 					bodyVO.setBonroadflag(new UFBoolean(false));
+					bodyVO.setVbdef2(lhbvo.getVbillnodz());//170917 传递大宗结算单号
 					alBodyVOs.add(bodyVO);
 
 					// //重新计算入库单上的金额,解决接口生成的入库单，在生成发票时不能带入金额的问题
@@ -608,16 +649,18 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 					: new UFDouble(orgvo.getDef4());
 			headvo.setBconvertflag(UFBoolean.FALSE);
 			headvo.setBestimateflag(UFBoolean.FALSE);
-			headvo.setBillmaker(puinvo.getParentVO()
-					.getAttributeValue("billmaker").toString());
+			// headvo.setBillmaker(puinvo.getParentVO()
+			// .getAttributeValue("billmaker").toString());
 			headvo.setBsystemflag(UFBoolean.FALSE);
 			headvo.setCaccountperiod(String.valueOf(dtbilldate.getYear()) + "-"
 					+ dtbilldate.getStrMonth());
-
-			headvo.setCreationtime(new UFDateTime(puinvo.getParentVO()
-					.getAttributeValue("creationtime").toString()));
-			headvo.setCreator(puinvo.getParentVO().getAttributeValue("creator")
-					.toString());
+			headvo.setCreator(cuserid);// 17081714 gwj 调整
+			headvo.setCreationtime(createTime);
+			headvo.setBillmaker(cuserid);// 170817 gwj 调整
+			// headvo.setCreationtime(new UFDateTime(puinvo.getParentVO()
+			// .getAttributeValue("creationtime").toString()));
+			// headvo.setCreator(puinvo.getParentVO().getAttributeValue("creator")
+			// .toString());
 			headvo.setCsrcmodulecode("IA");
 			headvo.setCstockorgid(puinvo.getParentVO()
 					.getAttributeValue("pk_org").toString());
@@ -630,15 +673,19 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 					.getAttributeValue("cvendorid").toString());
 			headvo.setDbilldate(new UFDate(puinvo.getParentVO()
 					.getAttributeValue("dbilldate").toString()));
-			headvo.setDmakedate(new UFDate(puinvo.getParentVO()
-					.getAttributeValue("dmakedate").toString()));
+			headvo.setDmakedate(createTime.getDate());
 			headvo.setDr(Integer.valueOf(0));
 			headvo.setPk_book(pk_book);
 			headvo.setPk_group(puinvo.getParentVO()
 					.getAttributeValue("pk_group").toString());
 			headvo.setPk_org(pk_costregion);
-			headvo.setVdef11(puinvo.getParentVO().getAttributeValue("vdef11")
-					.toString());
+			headvo.setVdef1(aggLhVo.getParentVO().getPk_id());//
+			// 单据头自定义项1记录来源单据主键
+			headvo.setVdef4(aggLhVo.getParentVO().getBpresettle());// 单据头自定义项4记录是否预结算标志
+			headvo.setVdef11(puinvo.getParentVO().getAttributeValue("vdef11") == null ? "~"
+					: puinvo.getParentVO().getAttributeValue("vdef11")
+							.toString());
+			headvo.setCsrcmodulecode(NCModule.OT.getSystemCode());// 若来源系统非外部系统，则生成的单据制单人会默认取当前登录人BaseInsertDataFillRule.fillMakeInfo
 
 			ArrayList<I9ItemVO> alBodyvo = new ArrayList<I9ItemVO>();
 			for (CircularlyAccessibleValueObject puinbvo : puinvo
@@ -655,17 +702,26 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 					if ((fdef3value.equals(UFDouble.ZERO_DBL))
 							|| (fdef4value.equals(UFDouble.ZERO_DBL))) {
 						throw new BusinessException(
-								"生成入库调整单异常：公户属性时组织的自定义项2、自定义项3作为除数不能为0");
+								"生成入库调整单异常：公户属性时组织的自定义项3、自定义项4作为除数不能为0");
 					}
 					fTransMny = fTransMny.div(fdef3value).div(fdef4value);
 				}
 				bodyvo.setCaccountperiod(String.valueOf(dtbilldate.getYear())
 						+ "-" + dtbilldate.getStrMonth());
 				bodyvo.setCcurrencyid("1002Z0100000000001K1");
+
 				bodyvo.setCinventoryid(puinbvo
 						.getAttributeValue("cmaterialoid").toString());
 				bodyvo.setCinventoryvid(puinbvo.getAttributeValue(
 						"cmaterialvid").toString());
+
+				// String pk_material_src = (String) puinbvo
+				// .getAttributeValue("cmaterialoid");
+				// String pk_material_new = mapMatVOsByPk.get(pk_material_src)
+				// .getDef5();// 170814 生成的入库单物料需要映射为物料档案自定义项5的值
+				// bodyvo.setAttributeValue("cmaterialoid", pk_material_new);
+				// bodyvo.setAttributeValue("cmaterialvid", pk_material_new);
+
 				bodyvo.setCrowno(puinbvo.getAttributeValue("crowno").toString());
 				bodyvo.setCunitid(puinbvo.getAttributeValue("cunitid")
 						.toString());
@@ -744,14 +800,15 @@ public class LhPurchaseInPlugin extends AbstractPfxxPlugin {
 					|| StringUtil.isEmptyWithTrim(bvo.getMatcode())) {
 				throw new BusinessException("产品编码不允许为空！");
 			}
-			if (bvo.getIqty() == null || bvo.getIqty().equals(UFDouble.ZERO_DBL)) {
+			if (bvo.getIqty() == null
+					|| bvo.getIqty().equals(UFDouble.ZERO_DBL)) {
 				throw new BusinessException("结算数量不允许为0！");
 			}
 			if (bvo.getIqtyadj() == null) {
 				// throw new BusinessException("原发数量不允许为空！");
 				bvo.setIqtyadj(UFDouble.ZERO_DBL);
 			}
-			if(bvo.getFtransmoney()==null){
+			if (bvo.getFtransmoney() == null) {
 				bvo.setFtransmoney(UFDouble.ZERO_DBL);
 			}
 			// if (bPresettle == false && bvo.getFprice() == null) {

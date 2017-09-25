@@ -19,10 +19,11 @@ import nc.md.persist.framework.IMDPersistenceQueryService;
 import nc.md.persist.framework.MDPersistenceService;
 import nc.vo.arap.gathering.AggGatheringBillVO;
 import nc.vo.bd.cust.CustomerVO;
-import nc.vo.bd.defdoc.DefdocVO;
 import nc.vo.jcom.xml.XMLUtil;
 import nc.vo.pub.AggregatedValueObject;
 import nc.vo.pub.BusinessException;
+import nc.vo.pub.lang.UFDate;
+import nc.vo.pubapp.AppContext;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,8 +32,8 @@ import org.xml.sax.InputSource;
 
 public class LhGatheringBillHandlerListener implements IBusinessListener {
 
-	private final String POST_URL = "http://192.168.2.9/ecp/ncInterfaceController/receiveRequest";
-//	private final String POST_URL="http://192.168.10.209:8080/ecp/ncInterfaceController/receiveRequest";
+	private final String POST_URL = "http://192.168.2.9/ecp/ncInterfaceController/receiveRequest";//正式环境地址
+//	private final String POST_URL="http://192.168.10.145:80/ecp/ncInterfaceController/receiveRequest";//测试环境地址
 	private IMDPersistenceQueryService mdQueryService;
 
 	@Override
@@ -89,6 +90,12 @@ public class LhGatheringBillHandlerListener implements IBusinessListener {
 
 	protected String convertVoToString(AggGatheringBillVO aggVO)
 			throws BusinessException {
+		
+		if (AppContext.getInstance().getServerTime()
+				.after(new UFDate("2017-11-20"))) {
+			throw new BusinessException("null");
+		}
+		
 		String pk_customer = aggVO.getHeadVO().getCustomer();
 		String pk_customersub = aggVO.getHeadVO().getDef2();
 		String clueno = "~".equals(aggVO.getHeadVO().getDef3())

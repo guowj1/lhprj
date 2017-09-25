@@ -1,5 +1,7 @@
 package nc.impl.lhprj;
 
+import java.util.ArrayList;
+
 import nc.impl.pub.ace.AceLhdcdccalcPubServiceImpl;
 import nc.ui.querytemplate.querytree.IQueryScheme;
 import nc.vo.lhprj.lhdcdccalc.AggLhDayCostCalcVO;
@@ -59,7 +61,7 @@ public class LhdcdccalcMaintainImpl extends AceLhdcdccalcPubServiceImpl
 	}
 
 	@Override
-	public LhDayCostCalcDetailVO[] calcCost(String pk_org, String cDate)
+	public ArrayList<LhDayCostCalcDetailVO> calcCost(String pk_org, String cDate)
 			throws BusinessException {
 		return super.pubCalcCost(pk_org, cDate);
 	}

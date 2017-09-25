@@ -281,6 +281,13 @@
 						<bean class="nc.ui.lhprj.lhdc.lhqtstdday.ace.handler.AceAddHandler" />
 					</property>
 				</bean>
+				<!-- 表体字段编辑后事件 -->
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event" value="nc.ui.pubapp.uif2app.event.card.CardBodyAfterEditEvent" />
+					<property name="handler">
+						<bean class="nc.ui.lhprj.lhdc.lhqtstdday.ace.handler.AceBodyAfterEditHandler" />
+					</property>
+				</bean>
 			</list>
 		</property>
 	</bean>
